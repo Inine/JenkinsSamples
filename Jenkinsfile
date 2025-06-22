@@ -49,7 +49,7 @@ pipeline {
             }
             post {
                 success {
-                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                    archiveArtifacts artifacts: "${env.TARGET_DIR}/*.jar", fingerprint: true
                     echo "Artifact build completed successfully"
                 }
                 failure {
@@ -66,30 +66,30 @@ pipeline {
                 stage('Unit Tests') {
                     steps {
                         echo "Running unit tests"
-                        sh '''
+                        sh """
                         echo "Running unit tests"
-                        mkdir -p target/surefire-reports
-                        touch target/surefire-reports/test.xml
-                        '''
+                        mkdir -p ${env.TARGET_DIR}/surefire-reports
+                        touch ${env.TARGET_DIR}/surefire-reports/test.xml
+                        """
                     }
                     post {
                         always {
-                            junit 'target/surefire-reports/*.xml'
+                            junit '${env.TARGET_DIR}/surefire-reports/*.xml'
                         }
                     }
                 }
                 stage('Integration Tests') {
                     steps {
                         echo "Running integration tests"
-                        sh '''
+                        sh """
                         echo "Running integration tests"
-                        mkdir -p target/failsafe-reports
-                        touch target/failsafe-reports/it.xml
-                        '''
+                        mkdir -p ${env.TARGET_DIR}/failsafe-reports
+                        touch ${env.TARGET_DIR}/failsafe-reports/it.xml
+                        """
                     }
                     post {
                         always {
-                            junit 'target/failsafe-reports/*.xml'
+                            junit "${env.TARGET_DIR}/failsafe-reports/*.xml"
                         }
                     }
                 }
