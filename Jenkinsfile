@@ -26,7 +26,7 @@ pipeline {
         APP_ENV = "${DEPLOY_ENV}"
         APP_VER = "${APP_VERSION}"
         RUN_TST = "${RUN_TESTS}"
-        TARGET_DIR = "dirname"
+        TARGET_DIR = "target${env.APP_ENV}_${env.APP_VERSION}"
     }
     
     stages {
@@ -41,10 +41,10 @@ pipeline {
                     )]) {
                       sh 'echo "$USERNAME:$PASSWORD something hidden here"'
                     }
-                    sh '''
-                        mkdir -p "${env.TARGET_DIR}"
-                        echo "fake jar content" > "${env.TARGET_DIR}"/app.jar
-                    '''
+                    sh """
+                        mkdir -p ${env.TARGET_DIR}
+                        echo 'fake jar content' > ${env.TARGET_DIR}/app.jar
+                    """
                 }
             }
             post {
