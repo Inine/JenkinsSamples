@@ -26,7 +26,7 @@ pipeline {
         APP_ENV = "${DEPLOY_ENV}"
         APP_VER = "${APP_VERSION}"
         RUN_TST = "${RUN_TESTS}"
-        TARGET_DIR = "target" + "${env.APP_ENV}" + "_" + "${env.APP_VERSION}"
+        TARGET_DIR = "target${env.APP_ENV}_${env.APP_VERSION}"
     }
     
     stages {
