@@ -87,11 +87,6 @@ pipeline {
                         touch ${env.TARGET_DIR}/failsafe-reports/it.xml
                         """
                     }
-                    post {
-                        always {
-                            junit "${env.TARGET_DIR}/failsafe-reports/*.xml"
-                        }
-                    }
                 }
                 stage('Code Quality') {
                     steps {
