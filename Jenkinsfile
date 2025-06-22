@@ -35,7 +35,7 @@ pipeline {
                 script {
                     echo "Building project from branch ${params.BRANCH_NAME}..."
                     withCredentials([usernamePassword(
-                      credentialsId: '3f9cd7d8-c8c7-4b57-a430-2dc0753c901c',
+                      credentialsId: 'jenkins_creds',
                       usernameVariable: 'USERNAME',
                       passwordVariable: 'PASSWORD'
                     )]) {
