@@ -9,7 +9,8 @@ pipeline {
     parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch name')
         string(name: 'APP_VERSION', defaultValue: 'latest', description: 'Application version to deploy')
-        choice(name: 'DEPLOY_ENV', choices: ['dev', 'staging', 'prod'], description: 'Deployment environment')
+        string(name: 'MY_SECRET_TOKEN', defaultValue: 'jenkins_creds')
+        choice(name: 'DEPLOY_ENV', choices: ['dev', 'staging', 'prod'], defaultValue: 'staging' description: 'Deployment environment')
         booleanParam(name: 'RUN_TESTS', defaultValue: true, description: 'Run tests?')
         gitParameter(
             name: 'BRANCH',
@@ -18,7 +19,7 @@ pipeline {
             defaultValue: 'master',
             selectedValue: 'NONE',
             sortMode: 'ASCENDING',
-            useRepository: 'sparkjava-mysql/backend'
+            useRepository: 'https://github.com/docker/awesome-compose.git'
         )
     }
     
@@ -27,6 +28,7 @@ pipeline {
         APP_VER = "${APP_VERSION}"
         RUN_TST = "${RUN_TESTS}"
         TARGET_DIR = "target${env.APP_ENV}_${env.APP_VERSION}"
+        TOKEN="${MY_SECRET_TOKEN}"
     }
     
     stages {
@@ -35,7 +37,7 @@ pipeline {
                 script {
                     echo "Building project from branch ${params.BRANCH_NAME}..."
                     withCredentials([usernamePassword(
-                      credentialsId: 'jenkins_creds',
+                      credentialsId: "${env.TOKEN}",
                       usernameVariable: 'USERNAME',
                       passwordVariable: 'PASSWORD'
                     )]) {
