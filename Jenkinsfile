@@ -72,11 +72,6 @@ pipeline {
                         touch ${env.TARGET_DIR}/surefire-reports/test.xml
                         """
                     }
-                    post {
-                        always {
-                            junit "{env.TARGET_DIR}/surefire-reports/*.xml"
-                        }
-                    }
                 }
                 stage('Integration Tests') {
                     steps {
