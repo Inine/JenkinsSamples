@@ -10,7 +10,7 @@ pipeline {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch name')
         string(name: 'APP_VERSION', defaultValue: 'latest', description: 'Application version to deploy')
         string(name: 'MY_SECRET_TOKEN', defaultValue: 'jenkins_creds')
-        choice(name: 'DEPLOY_ENV', choices: ['dev', 'staging', 'prod'], defaultValue: 'staging' description: 'Deployment environment')
+        choice(name: 'DEPLOY_ENV', choices: ['dev', 'staging', 'prod'], defaultValue: 'staging', description: 'Deployment environment')
         booleanParam(name: 'RUN_TESTS', defaultValue: true, description: 'Run tests?')
         gitParameter(
             name: 'BRANCH',
