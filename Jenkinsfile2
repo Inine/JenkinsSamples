@@ -19,13 +19,23 @@ pipeline {
         APP_ENV = "${DEPLOY_ENV}"
     }
     
+    
     stages {
-        stage('Build') {
-            steps {
-                script {
-                    helloWorld(name: "friday",
-                                dayOfWeek: "Johnny"
-                    )
+        stage('Parallel Stages') {
+            parallel {
+                stage('hello world') {
+                    steps {
+                        script {
+                            helloWorld(name: "friday",
+                                        dayOfWeek: "Johnny"
+                            )
+                        }
+                    }
+                }
+                stage('echo') {
+                    steps {
+                        echo "Running..."
+                    }
                 }
             }
         }
