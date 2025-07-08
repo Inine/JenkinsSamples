@@ -30,7 +30,7 @@ pipeline {
                 }
                 stage('echo') {
                     steps {
-                        step{
+                        script{
                             if (params.ENV == 'dev') {
                                 echo 'Deploying to DEV'
                             } else {
