@@ -37,6 +37,16 @@ pipeline {
                                 echo "Skipping deployment: not DEV (got ${params.ENV})"
                             }
 
+                            for (int i = 0; i < 3; i++) {
+                                echo "Сообщение ${i}"
+                            }
+
+                            try {
+                                sh 'exit 1'
+                            } catch (Exception e) {
+                                echo "Поймана ошибка: ${e.getMessage()}"
+                            }
+
                         }
                     }
                 }
