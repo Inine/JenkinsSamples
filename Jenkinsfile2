@@ -1,3 +1,4 @@
+@Library('example') _
 pipeline {
     agent any
 
