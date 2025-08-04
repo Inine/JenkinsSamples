@@ -13,7 +13,7 @@ pipeline {
         stage('echo') {
             steps {
                 script{
-                    echo 'Build from MAIN branch'
+                    echo 'Build from DEV branch'
                     }
                 }
             }
