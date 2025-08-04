@@ -13,11 +13,11 @@ pipeline {
             steps {
                 script{
                     echo 'Build from DEV branch'
-                    }
                 }
             }
         }
     }
+    
 
     post {
         always {
