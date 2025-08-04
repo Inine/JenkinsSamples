@@ -1,0 +1,28 @@
+//module 3 block 3
+@Library('example') _
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 1, unit: 'HOURS')
+        disableConcurrentBuilds()
+    }
+    
+    
+    stages {
+        stage('echo') {
+            steps {
+                script{
+                    echo 'Build from MAIN branch'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            deleteDir()
+        }
+    }
+}
