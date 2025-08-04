@@ -1,5 +1,4 @@
 //module 4 block 1
-@Library('example') _
 pipeline {
     agent any
 
