@@ -1,0 +1,27 @@
+//module 4 block 2
+pipeline {
+    agent any
+
+    options {
+        timeout(time: 1, unit: 'HOURS')
+        disableConcurrentBuilds()
+    }
+    
+    
+    stages {
+        stage('build') {
+            steps {
+                script{
+                    echo 'Deploy from Main branch'
+                }
+            }
+        }
+    }
+    
+
+    post {
+        always {
+            deleteDir()
+        }
+    }
+}
