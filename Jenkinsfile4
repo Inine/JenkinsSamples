@@ -12,7 +12,7 @@ pipeline {
         stage('build') {
             steps {
                 script{
-                    echo 'Deploy from Main branch'
+                    echo 'Deploy from Main - branch'
                 }
             }
         }
