@@ -1,4 +1,4 @@
-//module 4 block 2
+//module 4 block 2!
 pipeline {
     agent any
 
@@ -12,7 +12,7 @@ pipeline {
         stage('build') {
             steps {
                 script{
-                    echo 'Build from  DEV branch'
+                    echo 'Build from DEV branch'
                 }
             }
         }
