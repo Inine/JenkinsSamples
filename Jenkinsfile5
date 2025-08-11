@@ -5,7 +5,7 @@ pipeline {
     DOCKER_IMAGE = 'maven:3.8.5-eclipse-temurin-17'
     GIT_REPO = 'https://github.com/docker/awesome-compose.git'
     GIT_BRANCH = 'master'
-    NEXUS_URL = 'http://your-nexus-host:8081'
+    NEXUS_URL = 'http://130.193.42.36:8081'
     NEXUS_REPOSITORY = 'maven-releases'
     NEXUS_CREDENTIALS_ID = 'nexus-credentials'
     GROUP_ID = 'local.dev'
