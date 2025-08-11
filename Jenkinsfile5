@@ -1,0 +1,66 @@
+//module 4 block 3
+pipeline {
+  agent any
+  environment {
+    DOCKER_IMAGE = 'maven:3.8.5-eclipse-temurin-17'
+    GIT_REPO = 'https://github.com/docker/awesome-compose.git'
+    GIT_BRANCH = 'master'
+    NEXUS_URL = 'http://your-nexus-host:8081'
+    NEXUS_REPOSITORY = 'maven-releases'
+    NEXUS_CREDENTIALS_ID = 'nexus-credentials'
+    GROUP_ID = 'local.dev'
+    ARTIFACT_ID = 'backend'
+    ARTIFACT_PATH = 'target/app.jar'
+  }
+  options {
+    buildDiscarder(logRotator(artifactDaysToKeepStr: '7', artifactNumToKeepStr: '5'))
+  }
+
+  stages {
+    stage('Checkout code') {
+      steps {
+        git branch: "${GIT_BRANCH}", url: "${GIT_REPO}"
+      }
+    }
+
+  stage('Build JAR inside Docker') {
+    steps {
+      dir('sparkjava-mysql/backend') {
+        script {
+          docker.image(DOCKER_IMAGE).inside('-v $WORKSPACE:/workspace') {
+            sh '''
+            mvn --batch-mode clean compile assembly:single
+            '''
+          }
+        }
+      }
+    }
+  }
+
+  stage('Archive JAR') {
+    steps {
+      archiveArtifacts artifacts: "sparkjava-mysql/backend/target/app.jar", fingerprint: true
+    }
+  }
+
+  stage('Upload to Nexus') {
+    steps {
+      nexusArtifactUploader(
+        nexusVersion: 'nexus3',
+        protocol: 'http',
+        nexusUrl: "${NEXUS_URL.replaceAll('^https?://', '')}",
+        groupId: "${GROUP_ID}",
+        version: "${env.BUILD_NUMBER}",
+        repository: "${NEXUS_REPOSITORY}",
+        credentialsId: "${NEXUS_CREDENTIALS_ID}",
+        artifacts: [
+          [artifactId: "${ARTIFACT_ID}",
+           classifier: '',
+           file: "sparkjava-mysql/backend/target/app.jar",
+           type: 'jar']
+        ]
+      )
+    }
+  }
+  }
+  }
