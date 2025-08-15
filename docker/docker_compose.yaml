@@ -1,4 +1,5 @@
 services:
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -6,8 +7,13 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - blackbox
+      - alertmanager
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -21,6 +27,47 @@ services:
       - ./datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
     depends_on:
       - prometheus
+
+  loki:
+    image: grafana/loki:latest
+    container_name: loki
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/etc/loki/config.yml
+    environment:
+      TZ: ${SYSTEM_TIMEZONE:-Europe/Moscow}
+    command: -config.file=/etc/loki/config.yml
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail
+    volumes:
+      - /var/lib/jenkins/logs:/var/log/jenkins
+      - ./promtail-config.yaml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+
+  blackbox:
+    image: prom/blackbox-exporter:latest
+    container_name: blackbox
+    ports:
+      - '9115:9115'
+    volumes:
+      - ./blackbox.yml:/config/blackbox.yml
+    command:
+      - '--config.file=/config/blackbox.yml'
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    ports:
+      - '9093:9093'
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    environment:
+      TZ: ${SYSTEM_TIMEZONE:-Europe/Moscow}
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
 
 networks:
   default:
